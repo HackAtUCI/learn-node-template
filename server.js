@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 const bodyParser = require('body-parser');
+const fs = require("fs");
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
