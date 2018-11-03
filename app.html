@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+ 
+</head>
+
+
+
+<html>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+    <body>
+        <div style="width:100%;height:100vh;background-image:url(background.jpg);overflow-y: scroll ">
+            <div style="width: 100%; display:flex; flex-direction: rows; justify-content: center; align-content: center">
+                <h1 style="color:white;" class="display-3">UGHH CHORES</h1>
+            </div>
+            <div id="choresCardContainer" class="pavage" style="margin-left: 3vw;margin-right:5vw;"data-column="5" data-spacing="10"></div>
+            <button type="button"  data-toggle="modal" data-target="#addChoreModal" onclick="resetModal()" class="btn btn-primary btn-lg shadow" style="position:fixed;right:30px;bottom:30px;">
+                <div id = "Fab_contents" style = "display:flex; flex-direction: rows; justify-content: center; align-content: center">
+                    <span id="add_icon" class="material-icons mdc-fab__icon">add</span>
+                    <span class="mdc-fab__label">Add Chore</span>
+                </div>
+              </button>
+            <h2 id="numberChoresStatus" style="position:fixed; color: gray">No Chore Currently</h2>
+        </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="addChoreModal" tabindex="-1" role="dialog"  >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Chore</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="titleChoreWarning" class="alert alert-danger" role="alert" style="display: None">
+                        Title and Chore Description Can't Be Empty
+                    </div>
+                    <div id="choreAddError" class="alert alert-danger" role="alert" style="display: None">
+                        There Was Error Adding Your Chore
+                    </div>
+                    <label>Chore Description</label>
+                    <input type="text" id="choreTitle" class="form-control" placeholder="Title">
+                    <label>Chore Description</label>
+                    <textarea class="form-control" id="choreDescription" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="closeModal" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="submitChore()" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Card-->
+    <div id ="choreCard" class="card shadow" style="display: None;">
+        <div class="card-body bg-light shadow">
+            <h5 class="card-title">Chore Title</h5>
+            <p class="card-text" style="overflow-x: auto;">Chore Description</p>
+            <div style="width:100%;display: flex; flex-direction: row;justify-content:center">
+                <a href="#" class="btn btn-primary" style="max-width: 100%;overflow: hidden; margin-right:5%">Completed</a>
+                <a class="btn btn-info" style="max-width: 100%;overflow: hidden;">Delete Task</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="./pavage.js"></script>
+        <script>
+            window.addEventListener('load', () => {
+                const FabInnerContainerHeight = document.getElementById("Fab_contents").clientHeight;
+                const plusIconHeight = document.getElementById("add_icon").clientWidth;
+                document.getElementById("add_icon").style.height =  document.getElementById("add_icon").clientWidth + "px";
+                document.getElementById("add_icon").style.margin = (FabInnerContainerHeight/2) - (plusIconHeight/2) + "px";
+            });
+
+            function hideModalErrorMsg()
+            {
+                const titleChoreWarning = document.getElementById("titleChoreWarning");
+                const choreAddError = document.getElementById("choreAddError");
+                choreAddError.style.display = "None";
+                titleChoreWarning.style.display = "None";
+            } 
+
+            function showNumChoreStatus()
+            {
+                const numberChoresStatus = document.getElementById("numberChoresStatus");
+                numberChoresStatus.style.display = "block";
+                numberChoresStatus.style.right = ((numberChoresStatus.parentElement.clientWidth/2) - (numberChoresStatus.clientWidth / 2)) + "px";
+                numberChoresStatus.style.top = ((numberChoresStatus.parentElement.clientHeight/2) - (numberChoresStatus.clientHeight / 2)) + "px";
+            }
+
+            function hideNumChoreStatus()
+            {
+                const numberChoresStatus = document.getElementById("numberChoresStatus");
+                numberChoresStatus.style.display = "None";
+            }
+
+            function submitChore()
+            {
+                hideModalErrorMsg();
+                const choreTitle = document.getElementById("choreTitle");
+                const choreDescription = document.getElementById("choreDescription");
+                if (choreTitle.value.trim() == "" || choreDescription.value.trim() == "")
+                    titleChoreWarning.style.display = "Block";
+                else
+                    sendChoreContentToDatabase(choreTitle.value.trim(),choreDescription.value.trim());
+            }
+
+            function resetModal()
+            {
+                hideModalErrorMsg();
+                resetAddChoreValues();
+            }
+
+            function showChoreSubmissionError()
+            {
+                document.getElementById("choreAddError").style.display = "Block";
+            }
+            
+            function resetAddChoreValues()
+            {
+                document.getElementById("choreTitle").value = "";
+                document.getElementById("choreDescription").value = "";
+            }
+            
+            function closeModal()
+            {
+                document.getElementById("closeModal").click();
+            }
+            
+            function addChoreCard(key,information)
+            {
+                const container = document.getElementById("choresCardContainer");
+                const choreCard = document.getElementById("choreCard");
+                const newCard = document.createElement('div');
+                newCard.innerHTML = choreCard.innerHTML;
+                const deleteCardButton = newCard.children[0].children[2].children[1];
+                deleteCardButton.addEventListener('click',() => {handleDeleteCard(key)});
+                newCard.children[0].children[0].innerHTML = information.choreTitle;
+                newCard.children[0].children[1].innerHTML = information.choreDescription;
+                newCard.style.width = container.clientWidth / 5 + "px";
+                newCard.style.display = "Block";
+                container.appendChild(newCard);
+            }
+
+            function removeAllCards()
+            {
+                const container = document.getElementById("choresCardContainer");
+                container.innerHTML = "";
+            }
+
+            function addAllChoresCard(data)
+            {
+                Object.keys(data).forEach(key => {
+                    addChoreCard(key,data[key]);
+                })
+                pavage.fromDOM();
+            }
+
+        </script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+        <script>
+            //TODO -------------------------
+            function sendChoreContentToDatabase(choreTitle,choreDescription)
+            {
+                const choreForm = {
+                    "choreTitle": choreTitle,
+                    "choreDescription": choreDescription
+                }
+                fetch("http://127.0.0.1:3000/addChore",{method:"POST",body: JSON.stringify(choreForm),headers:{'Content-Type': 'application/json'}  }).then((res) => res.text()).then(text => {
+                    if (text.toLowerCase() != "success")
+                        showChoreSubmissionError();
+                    else
+                    {
+                        resetAddChoreValues();
+                        closeModal();
+                        getChoresFromServer();
+                    }
+                });
+            }
+
+            function getChoresFromServer()
+            {
+                fetch("http://127.0.0.1:3000/getChores",{method:"GET"}).then((res) => res.json()).then(data => {
+                    removeAllCards();
+                    if (Object.keys(data).length == 0)
+                        showNumChoreStatus();
+                    else
+                    {
+                        hideNumChoreStatus();
+                        addAllChoresCard(data);
+                    }
+                })
+            }
+            getChoresFromServer();
+
+            function handleDeleteCard(cardID)
+            {
+                fetch("http://127.0.0.1:3000/deleteChore" + "?" + "cardID=" + cardID,{method:"GET"}).then((res) => res.text()).then(data =>{
+                    getChoresFromServer();
+                });
+            }       
+
+        </script>
+        
+    </body>
+    
+</html>

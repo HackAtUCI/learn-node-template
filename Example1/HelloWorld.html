@@ -1,0 +1,26 @@
+<html> 
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <body>
+        <div style="background-color:#4286f4;display:flex;justify-content:center;height:100vh;flex-direction: column; align-items: center">
+            <h1 style="color:white">
+                Hello World
+            </h1>
+            <h1 id="Greetings" style="display:None;color:white"/>
+        </div>
+        <script>
+            //Implement your fetch method to fetch the data
+            const Greetings = document.getElementById("Greetings");
+            fetch("http://127.0.0.1:3000/getName",{method: "GET"}).then(res => res.text().then(
+                    (result) => {
+                        Greetings.childNodes[0].nodeValue = "I am " + result;
+                        Greetings.style.display = "block";   
+                    }
+                ));
+        </script>
+    </body>
+</html>
