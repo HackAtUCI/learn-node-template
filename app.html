@@ -64,16 +64,16 @@
     <!--Card-->
     <div id ="choreCard" class="card shadow" style="display: None;">
         <div class="card-body bg-light shadow">
-            <h5 class="card-title">Chore Title</h5>
-            <p class="card-text" style="overflow-x: auto;">Chore Description</p>
+            <h5 class="card-title" style="word-wrap: break-word;">Chore Title</h5>
+            <p class="card-text" style="word-wrap: break-word;">Chore Description</p>
             <div style="width:100%;display: flex; flex-direction: row;justify-content:center">
-                <a href="#" class="btn btn-primary" style="max-width: 100%;overflow: hidden; margin-right:5%">Completed</a>
+                <a href="#" class="btn btn-primary" style="max-width: 100%; margin-right:5%">Completed</a>
                 <a class="btn btn-info" style="max-width: 100%;overflow: hidden;">Delete Task</a>
             </div>
         </div>
     </div>
 
-    <script src="./pavage.js"></script>
+    <script src="http://127.0.0.1:3000/pavage.js"></script>
         <script>
             window.addEventListener('load', () => {
                 const FabInnerContainerHeight = document.getElementById("Fab_contents").clientHeight;

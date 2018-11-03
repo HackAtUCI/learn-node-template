@@ -2,9 +2,9 @@ var express = require("express");
 var app = express();
 const bodyParser = require('body-parser');
 const fs = require("fs");
-const low = require('lowdb')
-const FileSync = require('lowdb/adapters/FileSync')
-const adapter = new FileSync('db.json')
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+const adapter = new FileSync('db.json');
 const db = low(adapter);
 let id = null;
 
@@ -44,9 +44,16 @@ function allowCors(req,res,next) {
     next();
 }
 
+app.get("/pavage.js",function (req,res)
+{
+    res.end(fs.readFileSync("pavage.js"));
+});
 
 
-
+app.get("/background.jpg",function (req,res)
+{
+    res.end(fs.readFileSync("background.jpg"));
+});
 
 //TODO -----------------------------------------------
 app.get('/',function (req,res) {
@@ -69,4 +76,4 @@ app.post("/addChore",bodyParser.json(),function (req,res) {
 })
 
 
-app.listen(3000);
+app.listen(3000,() => console.log("Running On localhost:3000"));
