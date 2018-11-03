@@ -31,7 +31,6 @@ function getAllChoresFromDatabase()
 
 function deleteFromDatabase(id)
 {
-    console.log('chores[' + id + ']');
     db.unset('chores[' + id + ']').write();
 }
 
@@ -56,9 +55,15 @@ app.get("/background.jpg",function (req,res)
 });
 
 //TODO -----------------------------------------------
+
 app.get('/',function (req,res) {
     res.end(fs.readFileSync("app.html"));
 });
+
+app.post("/addChore",bodyParser.json(),function (req,res) { 
+    addToDatabase(req.body);
+    res.end("success");
+})
 
 app.get("/getChores",function (req,res) {
     res.end(JSON.stringify(getAllChoresFromDatabase()));
@@ -70,10 +75,7 @@ app.get("/deleteChore",function(req,res) {
 })
 
 
-app.post("/addChore",bodyParser.json(),function (req,res) { 
-    addToDatabase(req.body);
-    res.end("success");
-})
+
 
 
 app.listen(3000,() => console.log("Running On localhost:3000"));

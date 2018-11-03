@@ -67,8 +67,7 @@
             <h5 class="card-title" style="word-wrap: break-word;">Chore Title</h5>
             <p class="card-text" style="word-wrap: break-word;">Chore Description</p>
             <div style="width:100%;display: flex; flex-direction: row;justify-content:center">
-                <a href="#" class="btn btn-primary" style="max-width: 100%; margin-right:5%">Completed</a>
-                <a class="btn btn-info" style="max-width: 100%;overflow: hidden;">Delete Task</a>
+                <a class="btn btn-info" style="max-width: 100%;overflow: hidden;">Completed</a>
             </div>
         </div>
     </div>
@@ -143,7 +142,7 @@
                 const choreCard = document.getElementById("choreCard");
                 const newCard = document.createElement('div');
                 newCard.innerHTML = choreCard.innerHTML;
-                const deleteCardButton = newCard.children[0].children[2].children[1];
+                const deleteCardButton = newCard.children[0].children[2].children[0];
                 deleteCardButton.addEventListener('click',() => {handleDeleteCard(key)});
                 newCard.children[0].children[0].innerHTML = information.choreTitle;
                 newCard.children[0].children[1].innerHTML = information.choreDescription;
